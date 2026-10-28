@@ -1,0 +1,207 @@
+---
+import Icon from './Icon.astro'
+import { site, marketplaces } from '../data/site'
+import { waLink, telLink } from '../lib/whatsapp'
+
+const volumes = ['Até 30 pedidos/dia', '30 a 100 pedidos/dia', '100 a 300 pedidos/dia', 'Mais de 300 pedidos/dia', 'Ainda não sei']
+---
+
+<section id="contato" data-section="Contato" class="relative isolate overflow-hidden bg-ember py-24 text-ink sm:py-32 lg:py-40" aria-labelledby="contato-title">
+  <div class="absolute inset-0 -z-10 bg-[radial-gradient(110%_90%_at_10%_0%,#ff8c29_0%,#ff6b00_38%,#e85d04_70%,#b84300_100%)]" aria-hidden="true" />
+  <svg class="absolute -right-[10%] top-0 -z-10 h-full w-[70%] opacity-[0.12]" viewBox="0 0 400 400" preserveAspectRatio="none" aria-hidden="true">
+    <path data-parallax-x="-8" d="M300 0h100L100 400H0z" fill="#0a0a0a" />
+    <path data-parallax-x="8" d="M160 0h40L0 270v-55z" fill="#0a0a0a" />
+  </svg>
+
+  <div class="wrap grid gap-14 lg:grid-cols-12 lg:gap-10">
+    <div class="lg:col-span-6">
+      <p data-reveal class="eyebrow text-ink/70">08 — Contato comercial</p>
+      <h2 id="contato-title" data-split class="display mt-6 text-[clamp(2.6rem,7vw,6.6rem)]">Pronto para elevar sua operação?</h2>
+      <p data-reveal class="mt-8 max-w-lg text-lg text-ink/80">
+        Fale agora com o time comercial e descubra como a Fênix pode acelerar as entregas da sua loja.
+      </p>
+
+      <div data-reveal class="mt-10 grid gap-3 sm:max-w-md">
+        <a href={waLink()} target="_blank" rel="noopener" data-magnetic class="contact-line group">
+          <span data-magnetic-inner class="flex w-full items-center gap-4">
+            <span class="grid size-12 place-items-center rounded-full bg-ink text-whats"><Icon name="whatsapp" size={22} /></span>
+            <span class="flex-1">
+              <span class="eyebrow block !text-[0.62rem] text-ink/65">WhatsApp comercial</span>
+              <span class="display text-xl">{site.phones.commercial.label}</span>
+            </span>
+            <Icon name="arrow" size={20} class="transition-transform duration-500 group-hover:translate-x-1" />
+          </span>
+        </a>
+        <a href={telLink('sac')} class="contact-line group">
+          <span class="flex w-full items-center gap-4">
+            <span class="grid size-12 place-items-center rounded-full border border-ink/25"><Icon name="phone" size={20} /></span>
+            <span class="flex-1">
+              <span class="eyebrow block !text-[0.62rem] text-ink/65">SAC · {site.sacHours.open} às {site.sacHours.close}</span>
+              <span class="display text-xl">{site.phones.sac.label}</span>
+            </span>
+            <Icon name="arrow" size={20} class="transition-transform duration-500 group-hover:translate-x-1" />
+          </span>
+        </a>
+        <a href={`mailto:${site.email}`} class="contact-line group">
+          <span class="flex w-full items-center gap-4">
+            <span class="grid size-12 place-items-center rounded-full border border-ink/25"><Icon name="mail" size={20} /></span>
+            <span class="flex-1 overflow-hidden">
+              <span class="eyebrow block !text-[0.62rem] text-ink/65">E-mail</span>
+              <span class="block truncate font-semibold">{site.email}</span>
+            </span>
+            <Icon name="arrow" size={20} class="transition-transform duration-500 group-hover:translate-x-1" />
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="lg:col-span-6">
+      <form data-proposal class="rounded-[1.75rem] bg-ink p-6 text-paper shadow-[0_40px_120px_-40px_rgb(10_10_10/0.8)] sm:p-9" novalidate aria-labelledby="proposta-title">
+        <div class="flex items-center justify-between gap-4">
+          <h3 id="proposta-title" class="display text-2xl sm:text-3xl">Solicitar proposta</h3>
+          <span class="eyebrow !text-[0.6rem] text-ash">via WhatsApp</span>
+        </div>
+        <p class="mt-2 text-sm text-ash">Preencha em 30 segundos. Abrimos o WhatsApp comercial com a mensagem pronta para você enviar.</p>
+
+        <div class="mt-8 grid gap-5 sm:grid-cols-2">
+          <div class="field">
+            <input id="f-nome" name="nome" required autocomplete="name" placeholder=" " />
+            <label for="f-nome">Seu nome</label>
+          </div>
+          <div class="field">
+            <input id="f-loja" name="loja" required autocomplete="organization" placeholder=" " />
+            <label for="f-loja">Loja ou empresa</label>
+          </div>
+          <div class="field">
+            <input id="f-tel" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder=" " />
+            <label for="f-tel">Telefone (opcional)</label>
+          </div>
+          <div class="field">
+            <input id="f-cep" name="cep" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder=" " />
+            <label for="f-cep">CEP de coleta (opcional)</label>
+          </div>
+        </div>
+
+        <fieldset class="mt-7">
+          <legend class="text-sm font-semibold">Onde você vende?</legend>
+          <div class="mt-3 flex flex-wrap gap-2">
+            {
+              [...marketplaces, 'Loja própria', 'Outro'].map((m) => (
+                <label class="chip">
+                  <input type="checkbox" name="canais" value={m} class="sr-only" />
+                  <span>{m}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <fieldset class="mt-7">
+          <legend class="text-sm font-semibold">Volume médio de pedidos</legend>
+          <div class="mt-3 flex flex-wrap gap-2">
+            {
+              volumes.map((v, i) => (
+                <label class="chip">
+                  <input type="radio" name="volume" value={v} class="sr-only" checked={i === volumes.length - 1} />
+                  <span>{v}</span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div class="field mt-7">
+          <textarea id="f-msg" name="mensagem" rows="3" placeholder=" "></textarea>
+          <label for="f-msg">Conte sobre a sua operação (opcional)</label>
+        </div>
+
+        <p data-form-error class="mt-4 hidden text-sm text-flare" role="alert">Preencha seu nome e o nome da loja para continuar.</p>
+
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <button type="submit" class="btn btn-fire w-full shrink-0 whitespace-nowrap sm:w-auto" data-magnetic>
+            <span data-magnetic-inner class="inline-flex items-center gap-3">
+              Enviar pelo WhatsApp
+              <span class="btn-icon"><Icon name="whatsapp" size={16} /></span>
+            </span>
+          </button>
+          <p class="text-xs text-ash">Os dados vão apenas na mensagem do WhatsApp. Nada é armazenado neste site.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact-line {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.1rem 0.75rem 0.75rem;
+    border-radius: 999px;
+    background: rgb(10 10 10 / 0.06);
+    border: 1px solid rgb(10 10 10 / 0.14);
+    transition: background-color 0.5s var(--ease-out-expo), border-color 0.5s;
+  }
+  .contact-line:hover { background: rgb(10 10 10 / 0.12); border-color: rgb(10 10 10 / 0.3); }
+
+  .field { position: relative; }
+  .field input, .field textarea {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid rgb(243 243 241 / 0.2);
+    padding: 1.4rem 0 0.6rem;
+    color: var(--color-paper);
+    outline: none;
+    border-radius: 0;
+    resize: vertical;
+    transition: border-color 0.4s;
+  }
+  .field::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.5px;
+    background: var(--color-fire);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-out-expo);
+  }
+  .field:has(textarea)::after { bottom: 6px; }
+  .field:focus-within::after { transform: scaleX(1); }
+  .field label {
+    position: absolute;
+    left: 0;
+    top: 1.35rem;
+    color: var(--color-ash);
+    pointer-events: none;
+    transform-origin: left top;
+    transition: transform 0.45s var(--ease-out-expo), color 0.3s;
+  }
+  .field input:focus + label,
+  .field input:not(:placeholder-shown) + label,
+  .field textarea:focus + label,
+  .field textarea:not(:placeholder-shown) + label {
+    transform: translateY(-1.15rem) scale(0.78);
+    color: var(--color-flare);
+  }
+  .field input[aria-invalid='true'] { border-color: var(--color-flare); }
+
+  .chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: 999px;
+    border: 1px solid rgb(243 243 241 / 0.18);
+    font-size: 0.85rem;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.35s var(--ease-out-expo), color 0.35s, border-color 0.35s, transform 0.35s var(--ease-out-expo);
+  }
+  .chip:hover span { border-color: rgb(243 243 241 / 0.5); }
+  .chip input:checked + span { background: var(--color-fire); border-color: var(--color-fire); color: var(--color-ink); font-weight: 600; }
+  .chip input:focus-visible + span { outline: 2px solid var(--color-fire); outline-offset: 3px; }
+  .chip:active span { transform: scale(0.95); }
+</style>

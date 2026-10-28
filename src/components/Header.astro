@@ -1,0 +1,102 @@
+---
+import Logo from './Logo.astro'
+import Icon from './Icon.astro'
+import { nav, site } from '../data/site'
+import { waLink } from '../lib/whatsapp'
+---
+
+<header id="topo" data-header class="fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500">
+  <div class="wrap flex h-[var(--header-h)] items-center justify-between gap-6">
+    <a href="#inicio" class="relative z-10 shrink-0" aria-label="Fênix Entregas Flex — início">
+      <Logo width={128} eager class="h-auto w-[104px] sm:w-[128px]" />
+    </a>
+
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-1 rounded-full border border-white/10 bg-ink/40 p-1 backdrop-blur-md" data-nav>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={`#${item.id}`} data-nav-link={item.id} class="nav-link relative block rounded-full px-4 py-2 text-[0.82rem] font-medium text-steel transition-colors duration-300 hover:text-paper">
+                <span class="relative z-10">{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+        <span data-nav-pill aria-hidden="true" class="pointer-events-none absolute left-0 top-1 h-[calc(100%-0.5rem)] rounded-full bg-white/10 opacity-0" />
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href={waLink('Olá! Quero uma proposta de entregas da Fênix Entregas Flex.')} target="_blank" rel="noopener" data-magnetic data-wa-context class="btn btn-fire hidden !min-h-11 !px-5 !text-[0.85rem] sm:inline-flex">
+        <span data-magnetic-inner class="inline-flex items-center gap-2.5">
+          <Icon name="whatsapp" size={18} />
+          Falar com o comercial
+        </span>
+      </a>
+      <button
+        type="button"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="menu-mobile"
+        class="relative z-[60] grid size-11 place-items-center rounded-full border border-white/15 bg-ink/50 backdrop-blur-md lg:hidden"
+      >
+        <span class="sr-only" data-menu-label>Abrir menu</span>
+        <span aria-hidden="true" class="relative block h-3 w-5">
+          <span data-burger="1" class="absolute left-0 top-0 h-[1.5px] w-full bg-paper transition-transform duration-500 ease-[var(--ease-out-expo)]" />
+          <span data-burger="2" class="absolute bottom-0 left-0 h-[1.5px] w-full bg-paper transition-transform duration-500 ease-[var(--ease-out-expo)]" />
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div aria-hidden="true" class="absolute inset-x-0 bottom-0 h-px bg-white/0">
+    <div data-progress class="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-ember via-fire to-flare" />
+  </div>
+</header>
+
+<div
+  id="menu-mobile"
+  data-menu
+  class="invisible fixed inset-0 z-[55] flex flex-col bg-ink lg:hidden"
+  style="clip-path: circle(0% at calc(100% - 2.75rem) 2.25rem);"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu"
+>
+  <div class="grid-lines pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
+  <nav aria-label="Menu móvel" class="wrap relative mt-[calc(var(--header-h)+2rem)] flex-1">
+    <ul class="flex flex-col">
+      {
+        [{ id: 'inicio', label: 'Início' }, ...nav, { id: 'contato', label: 'Contato' }].map((item, i) => (
+          <li class="overflow-hidden border-b border-white/10">
+            <a href={`#${item.id}`} data-menu-link class="flex items-baseline justify-between py-4">
+              <span class="display text-[clamp(2rem,9vw,3.25rem)]">{item.label}</span>
+              <span class="eyebrow text-ash">{String(i + 1).padStart(2, '0')}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <div class="wrap relative grid gap-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]" data-menu-foot>
+    <a href={waLink()} target="_blank" rel="noopener" class="btn btn-fire w-full">
+      <Icon name="whatsapp" size={18} /> WhatsApp comercial · {site.phones.commercial.label}
+    </a>
+    <a href={`mailto:${site.email}`} class="btn btn-ghost w-full">{site.email}</a>
+  </div>
+</div>
+
+<style>
+  [data-header].is-scrolled {
+    background-color: rgb(10 10 10 / 0.72);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+  [data-header].is-scrolled > div:last-child { background-color: rgb(255 255 255 / 0.08); }
+  [data-header].is-hidden { transform: translateY(-100%); }
+  [data-header] { transition: transform 0.6s var(--ease-out-expo), background-color 0.5s, backdrop-filter 0.5s; }
+  .nav-link.is-active { color: var(--color-paper); }
+  [data-menu-toggle][aria-expanded='true'] [data-burger='1'] { transform: translateY(5.25px) rotate(45deg); }
+  [data-menu-toggle][aria-expanded='true'] [data-burger='2'] { transform: translateY(-5.25px) rotate(-45deg); }
+  [data-nav] { position: relative; }
+</style>

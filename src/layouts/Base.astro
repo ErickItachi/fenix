@@ -1,0 +1,115 @@
+---
+import '../styles/global.css'
+import interLatin from '@fontsource-variable/inter/files/inter-latin-opsz-normal.woff2?url'
+import { site, faq, regions, marketplaces } from '../data/site'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { title = site.title, description = site.description } = Astro.props
+const canonical = new URL(Astro.url.pathname, site.url).href
+const ogImage = new URL('/og-image.jpg', site.url).href
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${site.url}/#empresa`,
+  name: site.name,
+  slogan: site.tagline,
+  description,
+  url: site.url,
+  logo: `${site.url}/brand/fenix-logo-640.webp`,
+  image: ogImage,
+  email: site.email,
+  telephone: `+${site.phones.commercial.e164}`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.address.street,
+    addressLocality: site.address.city,
+    addressRegion: site.address.state,
+    postalCode: site.address.zip,
+    addressCountry: 'BR',
+  },
+  areaServed: regions.flatMap((r) => r.cities.map((c) => c.name)).map((name) => ({ '@type': 'Place', name })),
+  knowsAbout: ['Logística de última milha', 'Entregas Flex', ...marketplaces],
+  contactPoint: [
+    { '@type': 'ContactPoint', contactType: 'sales', telephone: `+${site.phones.commercial.e164}`, availableLanguage: 'pt-BR' },
+    {
+      '@type': 'ContactPoint',
+      contactType: 'customer service',
+      telephone: `+${site.phones.sac.e164}`,
+      availableLanguage: 'pt-BR',
+      description: 'SAC das 08h às 20h',
+    },
+  ],
+  sameAs: site.social.map((s) => s.href),
+}
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a },
+  })),
+}
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Fênix Entregas Flex — logística de última milha para marketplaces" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script is:inline>
+      // Ativa os estados iniciais de animação apenas quando o visitante não pediu menos movimento.
+      ;(function () {
+        var d = document.documentElement
+        d.classList.add('js')
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion')
+        // Segurança: se os scripts não carregarem, o conteúdo aparece mesmo assim.
+        setTimeout(function () { if (!d.classList.contains('motion-ready')) d.classList.remove('motion') }, 4000)
+      })()
+    </script>
+
+    <script type="application/ld+json" set:html={JSON.stringify(business)} />
+    <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+  </head>
+  <body class="min-h-dvh">
+    <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-fire focus:px-5 focus:py-3 focus:font-semibold focus:text-ink">
+      Pular para o conteúdo
+    </a>
+    <slot />
+  </body>
+</html>

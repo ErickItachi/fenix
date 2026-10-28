@@ -1,0 +1,29 @@
+---
+import Icon, { type IconName } from './Icon.astro'
+
+interface Props {
+  href: string
+  variant?: 'fire' | 'ghost' | 'ink'
+  icon?: IconName
+  external?: boolean
+  class?: string
+  magnetic?: boolean
+  [key: string]: unknown
+}
+
+const { href, variant = 'fire', icon = 'arrow', external = false, class: className, magnetic = true, ...rest } = Astro.props
+---
+
+<a
+  href={href}
+  class:list={['btn', `btn-${variant}`, className]}
+  data-magnetic={magnetic ? '' : undefined}
+  target={external ? '_blank' : undefined}
+  rel={external ? 'noopener' : undefined}
+  {...rest}
+>
+  <span data-magnetic-inner class="relative inline-flex items-center gap-3">
+    <slot />
+    <span class="btn-icon"><Icon name={icon} size={16} stroke={2} /></span>
+  </span>
+</a>

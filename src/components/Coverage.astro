@@ -1,0 +1,147 @@
+---
+import Icon from './Icon.astro'
+import { hub, regions } from '../data/site'
+import { waLink } from '../lib/whatsapp'
+
+// Projeção equiretangular simples da Grande São Paulo para o viewBox 1000×540.
+const lonMin = -47.0, lonMax = -46.1, latMax = -23.32, latMin = -23.74
+const W = 1000, H = 540
+const px = (lon: number) => ((lon - lonMin) / (lonMax - lonMin)) * W
+const py = (lat: number) => ((latMax - lat) / (latMax - latMin)) * H
+const kmPerUnitY = ((latMax - latMin) * 111) / H
+
+const h = { x: px(hub.lon), y: py(hub.lat) }
+const nodes = regions.flatMap((r) =>
+  r.cities.map((c) => {
+    const x = px(c.lon), y = py(c.lat)
+    const dx = x - h.x, dy = y - h.y
+    const len = Math.hypot(dx, dy) || 1
+    const bend = Math.min(60, len * 0.22)
+    const cx = (h.x + x) / 2 - (dy / len) * bend
+    const cy = (h.y + y) / 2 + (dx / len) * bend
+    return { region: r.id, name: c.name, x, y, d: `M${h.x.toFixed(1)} ${h.y.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}` }
+  }),
+)
+
+// Grade de pontos com intensidade pela proximidade de cidades atendidas
+const dots: { x: number; y: number; o: number }[] = []
+for (let y = 10; y < H; y += 18) {
+  for (let x = 10; x < W; x += 18) {
+    const near = Math.min(...nodes.map((n) => Math.hypot(n.x - x, n.y - y)), Math.hypot(h.x - x, h.y - y))
+    const o = near < 26 ? 0.55 : near < 60 ? 0.22 : near < 110 ? 0.1 : 0.045
+    dots.push({ x, y, o })
+  }
+}
+const rings = [10, 20, 30, 40].map((km) => ({ km, r: km / kmPerUnitY }))
+---
+
+<section id="cobertura" data-section="Cobertura" class="relative overflow-hidden bg-ink py-24 sm:py-32 lg:py-40" aria-labelledby="cobertura-title">
+  <div class="wrap">
+    <div class="grid gap-8 lg:grid-cols-12 lg:items-end">
+      <div class="lg:col-span-7">
+        <p data-reveal class="eyebrow text-fire">05 — Área de cobertura</p>
+        <h2 id="cobertura-title" data-split class="display mt-6 text-[clamp(2.4rem,6vw,5.8rem)]">100% das áreas Flex da Grande São Paulo.</h2>
+      </div>
+      <p data-reveal class="text-steel lg:col-span-4 lg:col-start-9">
+        Saindo da base no Parque Novo Mundo, na zona norte da capital, com duas janelas de coleta por dia para maximizar as entregas das suas vendas.
+      </p>
+    </div>
+
+    <div class="mt-14 grid grid-cols-[minmax(0,1fr)] gap-8 lg:mt-20 lg:grid-cols-12 lg:gap-10" data-coverage>
+      <figure class="relative self-start overflow-hidden rounded-[1.75rem] border border-white/10 bg-coal lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:col-span-8">
+        <div class="flex items-center justify-between border-b border-white/10 px-5 py-3">
+          <span class="eyebrow !text-[0.62rem] text-ash">Grande São Paulo · rotas a partir da base</span>
+          <span class="eyebrow !text-[0.62rem] text-fire" data-map-status aria-live="polite">Todas as regiões</span>
+        </div>
+        <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img" aria-labelledby="mapa-desc">
+          <desc id="mapa-desc">Mapa esquemático da Grande São Paulo com rotas da base Fênix, no Parque Novo Mundo, até a capital, Região do ABC, Guarulhos, Osasco, Caieiras, Cajamar, Cotia, Embu, Barueri, Alphaville, Carapicuíba, Jandira, Itapevi, Santana de Parnaíba e Alto Tietê.</desc>
+          <g aria-hidden="true">
+            {dots.map((d) => <circle cx={d.x} cy={d.y} r="1.5" fill="#f3f3f1" opacity={d.o} />)}
+            {
+              rings.map((r) => (
+                <g>
+                  <circle cx={h.x} cy={h.y} r={r.r} stroke="rgb(255 255 255 / .09)" stroke-dasharray="3 6" fill="none" />
+                  <text x={h.x + r.r * 0.707 + 4} y={h.y + r.r * 0.707 + 12} font-size="10" fill="rgb(255 255 255 / .35)" class="map-mono">{r.km} km</text>
+                </g>
+              ))
+            }
+            {nodes.map((n) => <path data-map-route data-region={n.region} d={n.d} stroke="#ff6b00" stroke-width="1.6" fill="none" stroke-linecap="round" class="map-route" />)}
+            {
+              nodes.map((n) => (
+                <g data-map-node data-region={n.region} transform={`translate(${n.x.toFixed(1)} ${n.y.toFixed(1)})`} class="map-node">
+                  <circle r="11" fill="#ff6b00" opacity="0" class="map-halo" />
+                  <circle r="4.5" fill="#0a0a0a" stroke="#ff8c29" stroke-width="2" />
+                  <text y="-12" text-anchor="middle" font-size="12.5" fill="#f3f3f1" class="map-label map-mono">{n.name}</text>
+                </g>
+              ))
+            }
+            <g transform={`translate(${h.x.toFixed(1)} ${h.y.toFixed(1)})`}>
+              <circle r="22" fill="#ff6b00" opacity=".18" class="map-hub-pulse" />
+              <circle r="9" fill="#ff6b00" />
+              <circle r="3.5" fill="#0a0a0a" />
+              <text x="-14" y="-16" text-anchor="end" font-size="12" fill="#ff8c29" class="map-mono" font-weight="600">BASE FÊNIX</text>
+            </g>
+          </g>
+        </svg>
+        <figcaption class="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-white/10 px-5 py-3 text-[0.72rem] text-ash">
+          <span class="flex items-center gap-2"><span class="size-2.5 rounded-full bg-fire" /> Base operacional</span>
+          <span class="flex items-center gap-2"><span class="size-2.5 rounded-full border-2 border-flare" /> Cidades atendidas</span>
+          <span>Posições aproximadas. Confirme o seu CEP com o comercial.</span>
+        </figcaption>
+      </figure>
+
+      <div class="flex flex-col lg:col-span-4">
+        <ul class="grid gap-2" role="list">
+          {
+            regions.map((r, i) => (
+              <li>
+                <button type="button" data-region-btn={r.id} aria-pressed="false" class="region-btn group flex w-full items-start gap-4 rounded-2xl border border-white/10 px-4 py-4 text-left transition-colors duration-300 hover:border-white/25">
+                  <span class="eyebrow mt-1 text-ash transition-colors group-aria-pressed:text-fire">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="flex-1">
+                    <span class="block font-semibold">{r.name}</span>
+                    <span class="mt-1 block text-sm text-ash">{r.summary}</span>
+                  </span>
+                  <span class="mt-1 text-xs text-ash">{r.cities.length > 1 ? r.cities.length : ''}</span>
+                </button>
+              </li>
+            ))
+          }
+        </ul>
+
+        <form data-cep-form class="mt-6 rounded-2xl border border-white/10 bg-graphite p-5" novalidate>
+          <label for="cep" class="font-semibold">Consulte o seu CEP</label>
+          <p class="mt-1 text-sm text-ash">Enviamos a consulta direto para o WhatsApp comercial.</p>
+          <div class="mt-4 flex gap-2">
+            <input id="cep" name="cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9" aria-describedby="cep-erro" class="min-w-0 flex-1 rounded-full border border-white/15 bg-ink px-5 py-3 tabular text-paper outline-none transition-colors placeholder:text-ash/60 focus:border-fire" />
+            <button type="submit" class="btn btn-fire !min-h-12 !px-5" data-magnetic>
+              <span data-magnetic-inner class="inline-flex items-center gap-2">Consultar <Icon name="arrow" size={16} stroke={2} /></span>
+            </button>
+          </div>
+          <p id="cep-erro" data-cep-error class="mt-2 hidden text-sm text-flare" role="alert">Informe um CEP com 8 dígitos.</p>
+        </form>
+        <a data-region-cta href={waLink('Olá! Quero confirmar se a Fênix atende a minha região.')} target="_blank" rel="noopener" class="link-line mt-5 inline-flex items-center gap-2 self-start text-sm font-semibold text-fire">
+          <Icon name="whatsapp" size={16} /> <span data-region-cta-label>Confirmar minha região pelo WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .map-mono { font-weight: 500; letter-spacing: 0.01em; font-variant-numeric: tabular-nums; }
+  .map-route { opacity: 0.55; transition: opacity 0.5s, stroke-width 0.5s; }
+  .map-label { opacity: 0; transition: opacity 0.4s; paint-order: stroke; stroke: #111; stroke-width: 4px; }
+  .map-node { transition: opacity 0.4s; }
+  [data-coverage].has-active .map-route { opacity: 0.08; }
+  [data-coverage].has-active .map-node { opacity: 0.35; }
+  [data-coverage].has-active .map-route.is-active { opacity: 1; stroke-width: 2.4; }
+  [data-coverage].has-active .map-node.is-active { opacity: 1; }
+  .map-node.is-active .map-label { opacity: 1; }
+  .map-node.is-active .map-halo { opacity: 0.25; }
+  .map-hub-pulse { transform-box: fill-box; transform-origin: center; animation: hub 2.4s var(--ease-out-expo) infinite; }
+  @keyframes hub { from { transform: scale(0.6); opacity: 0.5; } to { transform: scale(2.4); opacity: 0; } }
+  .region-btn[aria-pressed='true'] { border-color: var(--color-fire); background: rgb(255 107 0 / 0.08); }
+  @media (min-width: 1024px) {
+    [data-coverage]:not(.has-active) .map-label { opacity: 0.6; font-size: 11px; }
+  }
+</style>

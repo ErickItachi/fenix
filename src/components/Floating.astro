@@ -1,0 +1,67 @@
+---
+import Icon from './Icon.astro'
+import { nav } from '../data/site'
+import { waLink } from '../lib/whatsapp'
+const sections = [{ id: 'inicio', label: 'Início' }, ...nav, { id: 'contato', label: 'Contato' }]
+---
+
+<!-- WhatsApp sempre acessível; a mensagem muda conforme a seção visível -->
+<a
+  href={waLink()}
+  target="_blank"
+  rel="noopener"
+  data-fab
+  data-wa-context
+  class="fab fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-4 z-40 flex items-center gap-3 rounded-full bg-whats p-1.5 pr-1.5 text-ink shadow-[0_18px_50px_-12px_rgb(37_211_102/0.6)] sm:bottom-6 sm:right-6"
+  aria-label="Conversar com o comercial no WhatsApp"
+>
+  <span data-fab-label class="fab-label hidden text-sm font-semibold sm:block">Fale com o comercial</span>
+  <span class="grid size-12 place-items-center rounded-full bg-ink text-whats"><Icon name="whatsapp" size={24} /></span>
+</a>
+
+<!-- Indicador de seção (desktop) -->
+<nav aria-label="Seções" class="fixed left-5 top-1/2 z-30 hidden -translate-y-1/2 xl:block" data-rail>
+  <ul class="flex flex-col gap-3">
+    {
+      sections.map((s) => (
+        <li>
+          <a href={`#${s.id}`} data-rail-link={s.id} class="rail-link group flex items-center gap-3">
+            <span class="rail-dot block h-px w-4 bg-current transition-all duration-500 ease-[var(--ease-out-expo)]" />
+            <span class="rail-label eyebrow rounded-full bg-ink/80 px-2.5 py-1 !text-[0.6rem] text-paper opacity-0 backdrop-blur transition-all duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-0 group-hover:opacity-100">
+              {s.label}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<!-- Cursor (somente ponteiro fino) -->
+<div data-cursor aria-hidden="true" class="pointer-events-none fixed left-0 top-0 z-[70] hidden">
+  <div data-cursor-ring class="-ml-5 -mt-5 size-10 rounded-full border border-fire/70 transition-[width,height,margin,background-color,border-color] duration-300 ease-[var(--ease-out-expo)]" />
+</div>
+
+<style>
+  .fab { transform: translateY(140%); transition: transform 0.7s var(--ease-out-expo); gap: 0; }
+  .fab-label { max-width: 0; overflow: hidden; white-space: nowrap; opacity: 0; transition: max-width 0.6s var(--ease-out-expo), opacity 0.4s, padding 0.6s var(--ease-out-expo); }
+  .fab:hover .fab-label, .fab:focus-visible .fab-label { max-width: 14rem; opacity: 1; padding: 0 0.75rem 0 1rem; }
+  .fab.is-visible { transform: none; }
+  .fab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 0 rgb(37 211 102 / 0.55);
+    animation: fab-ping 2.6s var(--ease-out-expo) infinite;
+  }
+  @keyframes fab-ping { 0% { box-shadow: 0 0 0 0 rgb(37 211 102 / 0.5); } 70%, 100% { box-shadow: 0 0 0 16px rgb(37 211 102 / 0); } }
+
+  [data-rail] { color: rgb(138 138 138 / 0.7); }
+  .rail-label { transform: translateX(-6px); }
+  .rail-link.is-active { color: #ff6b00; }
+  .rail-link.is-active .rail-dot { width: 1.5rem; height: 2px; }
+
+  [data-cursor].is-hover [data-cursor-ring] { width: 4.5rem; height: 4.5rem; margin: -2.25rem 0 0 -2.25rem; background: rgb(255 107 0 / 0.12); border-color: transparent; }
+  [data-cursor].is-down [data-cursor-ring] { width: 1.75rem; height: 1.75rem; margin: -0.875rem 0 0 -0.875rem; }
+</style>

@@ -1,0 +1,78 @@
+---
+import { pillars } from '../data/site'
+
+const statement =
+  'Movimento constante. Entrega garantida. Logística ágil, confiável e eficiente para sellers — mesmo nos picos de demanda.'
+---
+
+<section id="sobre" data-section="Sobre" data-theme="light" class="relative bg-ink" aria-labelledby="sobre-title">
+  <div data-about-panel class="relative overflow-hidden rounded-t-[2rem] bg-paper text-ink sm:rounded-t-[3rem]">
+    <div class="wrap py-24 sm:py-32 lg:py-40">
+      <div class="flex items-center justify-between gap-6 border-b border-ink/15 pb-6">
+        <p class="eyebrow text-ink/60">01 — Sobre a Fênix</p>
+        <p class="eyebrow hidden text-ink/60 sm:block">São Paulo · SP</p>
+      </div>
+
+      <h2 id="sobre-title" class="sr-only">Sobre a Fênix Entregas Flex</h2>
+      <p data-scrub-words class="display mt-12 max-w-[20ch] text-[clamp(2.1rem,6.2vw,6rem)] !leading-[1] sm:mt-16">
+        {statement}
+      </p>
+
+      <div class="mt-20 grid gap-14 lg:mt-28 lg:grid-cols-12 lg:gap-10">
+        <div class="relative lg:col-span-5">
+          <div data-parallax="-12" class="relative mx-auto aspect-square w-full max-w-[26rem]">
+            <!-- Selo giratório -->
+            <svg data-spin viewBox="0 0 200 200" class="absolute inset-0 h-full w-full text-ink" aria-hidden="true">
+              <defs>
+                <path id="seal-circle" d="M100,100 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0" />
+              </defs>
+              <text font-size="9.6" font-weight="600" fill="currentColor">
+                <textPath href="#seal-circle" textLength="510" lengthAdjust="spacing">SEU PEDIDO RENASCE A CADA ENTREGA • FÊNIX ENTREGAS FLEX • </textPath>
+              </text>
+            </svg>
+            <div class="absolute inset-[22%] grid place-items-center rounded-full bg-ink shadow-[0_30px_80px_-30px_rgb(10_10_10/0.6)]">
+              <svg viewBox="0 0 120 120" class="w-1/2" aria-hidden="true">
+                <defs>
+                  <linearGradient id="xg" x1="0" x2="1" y1="0" y2="1">
+                    <stop offset="0" stop-color="#ff8c29" />
+                    <stop offset="1" stop-color="#e85d04" />
+                  </linearGradient>
+                  <linearGradient id="xs" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0" stop-color="#fff" />
+                    <stop offset=".5" stop-color="#9a9a9a" />
+                    <stop offset="1" stop-color="#e5e5e5" />
+                  </linearGradient>
+                </defs>
+                <path d="M14 14h26l60 92H74z" fill="url(#xs)" />
+                <path d="M92 6h24L32 114H8z" fill="url(#xg)" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 lg:col-start-7">
+          <p data-reveal class="text-lg leading-relaxed text-ink/75 sm:text-xl">
+            A Fênix Entregas Flex nasceu da visão empreendedora de seus sócios, com o propósito de atender às necessidades dos sellers com soluções logísticas ágeis, confiáveis e eficientes.
+          </p>
+          <p data-reveal class="mt-6 leading-relaxed text-ink/65">
+            Inspirada na força e na resiliência da fênix, símbolo de renovação e superação, a empresa renova todos os dias o compromisso com a excelência operacional: cada pedido entregue com qualidade, pontualidade e segurança — inclusive nas altas demandas e nos picos sazonais.
+          </p>
+
+          <ol class="mt-14 border-t border-ink/15">
+            {
+              pillars.map((p, i) => (
+                <li data-reveal class="group grid grid-cols-[3rem_1fr] gap-x-4 border-b border-ink/15 py-7 sm:grid-cols-[4rem_1fr]">
+                  <span class="eyebrow pt-2 text-ember">{String(i + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3 class="display text-2xl transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:translate-x-1 sm:text-3xl">{p.title}</h3>
+                    <p class="mt-2 text-ink/70">{p.text}</p>
+                  </div>
+                </li>
+              ))
+            }
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

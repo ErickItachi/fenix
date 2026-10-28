@@ -1,0 +1,73 @@
+---
+import Logo from './Logo.astro'
+import Icon from './Icon.astro'
+import { site, nav } from '../data/site'
+import { waLink, telLink } from '../lib/whatsapp'
+const year = new Date().getFullYear()
+const socialIcon = { Instagram: 'instagram', LinkedIn: 'linkedin', Facebook: 'facebook' } as const
+---
+
+<footer class="relative overflow-hidden bg-ink pt-20 sm:pt-28" aria-labelledby="rodape-title">
+  <h2 id="rodape-title" class="sr-only">Rodapé</h2>
+  <div class="wrap grid gap-12 border-b border-white/10 pb-14 sm:grid-cols-2 lg:grid-cols-12">
+    <div class="sm:col-span-2 lg:col-span-4">
+      <Logo width={190} class="h-auto w-[170px] sm:w-[190px]" />
+      <p class="mt-6 max-w-xs text-steel">{site.tagline} Logística de última milha para sellers na Grande São Paulo.</p>
+      <div class="mt-8 flex gap-2">
+        {
+          site.social.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener" aria-label={`${s.name} da Fênix Entregas Flex`} data-magnetic class="grid size-11 place-items-center rounded-full border border-white/15 text-steel transition-colors duration-300 hover:border-fire hover:bg-fire hover:text-ink">
+              <span data-magnetic-inner><Icon name={socialIcon[s.name]} size={19} /></span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <nav aria-label="Rodapé" class="lg:col-span-2">
+      <h3 class="eyebrow text-ash">Navegação</h3>
+      <ul class="mt-5 grid gap-3">
+        <li><a class="link-line text-steel hover:text-paper" href="#inicio">Início</a></li>
+        {nav.map((n) => <li><a class="link-line text-steel hover:text-paper" href={`#${n.id}`}>{n.label}</a></li>)}
+        <li><a class="link-line text-steel hover:text-paper" href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+
+    <div class="lg:col-span-3">
+      <h3 class="eyebrow text-ash">Contato</h3>
+      <ul class="mt-5 grid gap-4 text-steel">
+        <li>
+          <a class="link-line hover:text-paper" href={waLink()} target="_blank" rel="noopener">Comercial · {site.phones.commercial.label}</a>
+        </li>
+        <li>
+          <a class="link-line hover:text-paper" href={telLink('sac')}>SAC · {site.phones.sac.label}</a>
+          <span class="mt-1 block text-xs text-ash">Das {site.sacHours.open} às {site.sacHours.close}</span>
+        </li>
+        <li><a class="link-line break-all hover:text-paper" href={`mailto:${site.email}`}>{site.email}</a></li>
+      </ul>
+    </div>
+
+    <div class="lg:col-span-3">
+      <h3 class="eyebrow text-ash">Endereço</h3>
+      <address class="mt-5 not-italic text-steel">
+        <a href={site.address.maps} target="_blank" rel="noopener" class="group inline-flex gap-3 hover:text-paper">
+          <Icon name="pin" size={18} class="mt-0.5 shrink-0 text-fire" />
+          <span>
+            {site.address.street}<br />
+            {site.address.district}, {site.address.city} - {site.address.state}<br />
+            CEP {site.address.zip}
+          </span>
+        </a>
+      </address>
+    </div>
+  </div>
+
+  <div class="wrap flex flex-col gap-3 py-6 text-xs text-ash sm:flex-row sm:items-center sm:justify-between">
+    <p>© {year} {site.name}. Todos os direitos reservados.</p>
+    <a href="#inicio" class="link-line inline-flex items-center gap-2 self-start hover:text-paper sm:self-auto">Voltar ao topo <Icon name="arrow" size={14} class="-rotate-90" /></a>
+  </div>
+
+  <div aria-hidden="true" class="pointer-events-none select-none overflow-hidden pt-[4vw]">
+    <p data-footer-word class="display text-chrome -mb-[0.2em] text-center text-[25vw] !leading-[1] !tracking-[-0.06em]">FÊNIX</p>
+  </div>
+</footer>

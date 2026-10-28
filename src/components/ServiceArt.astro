@@ -1,0 +1,117 @@
+---
+// Ilustrações animadas de cada serviço. A animação roda quando o pai recebe .is-active.
+import type { ServiceIcon } from '../data/site'
+interface Props { kind: ServiceIcon; class?: string; uid: string }
+const { kind, class: className, uid } = Astro.props
+const gid = `fg-${kind}-${uid}`
+---
+
+<svg viewBox="0 0 400 300" class:list={['service-art', `art-${kind}`, className]} fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id={gid} x1="0" x2="1">
+      <stop offset="0" stop-color="#ff8c29" /><stop offset="1" stop-color="#e85d04" />
+    </linearGradient>
+  </defs>
+  {
+    kind === 'bolt' && (
+      <g>
+        <circle cx="200" cy="150" r="104" stroke="rgb(255 255 255 / .12)" />
+        <circle cx="200" cy="150" r="78" stroke="rgb(255 255 255 / .08)" stroke-dasharray="2 8" />
+        {Array.from({ length: 12 }, (_, i) => (
+          <line x1="200" y1="52" x2="200" y2={i % 3 === 0 ? 66 : 60} stroke="rgb(255 255 255 / .35)" transform={`rotate(${i * 30} 200 150)`} />
+        ))}
+        <circle class="art-orbit" cx="200" cy="150" r="104" stroke={`url(#${gid})`} stroke-width="3" stroke-linecap="round" pathLength="100" stroke-dasharray="26 100" />
+        <line class="art-hand" x1="200" y1="150" x2="200" y2="82" stroke="#f3f3f1" stroke-width="3" stroke-linecap="round" />
+        <circle cx="200" cy="150" r="6" fill="#ff6b00" />
+        <path class="art-pop" d="M290 64l-26 34h18l-6 26 26-34h-18z" fill={`url(#${gid})`} />
+      </g>
+    )
+  }
+  {
+    kind === 'stack' && (
+      <g>
+        {[0, 1, 2].map((i) => (
+          <g class="art-box" style={`--i:${i}`}>
+            <path d={`M200 ${190 - i * 52}l-86-40 86-40 86 40z`} fill={i === 2 ? `url(#${gid})` : 'rgb(255 255 255 / .06)'} stroke={i === 2 ? 'none' : 'rgb(255 255 255 / .3)'} />
+            <path d={`M114 ${150 - i * 52}v28l86 40v-28zM286 ${150 - i * 52}v28l-86 40v-28z`} fill="rgb(255 255 255 / .03)" stroke="rgb(255 255 255 / .22)" />
+          </g>
+        ))}
+        <path d="M60 250h280" stroke="rgb(255 255 255 / .12)" stroke-dasharray="4 6" />
+      </g>
+    )
+  }
+  {
+    kind === 'route' && (
+      <g>
+        {Array.from({ length: 7 }, (_, r) =>
+          Array.from({ length: 9 }, (_, c) => <circle cx={40 + c * 40} cy={30 + r * 40} r="1.6" fill="rgb(255 255 255 / .22)" />),
+        )}
+        <path class="art-path" d="M60 250 C 60 170, 140 190, 160 130 S 260 60, 340 50" stroke={`url(#${gid})`} stroke-width="3.5" stroke-linecap="round" pathLength="100" />
+        <path d="M60 250 C 120 250, 200 250, 230 170 S 300 120, 340 50" stroke="rgb(255 255 255 / .18)" stroke-dasharray="3 7" />
+        <circle cx="60" cy="250" r="9" fill="#0a0a0a" stroke="#f3f3f1" stroke-width="2" />
+        <circle class="art-pin" cx="340" cy="50" r="10" fill="#ff6b00" />
+        <circle class="art-ring" cx="340" cy="50" r="10" stroke="#ff6b00" />
+      </g>
+    )
+  }
+  {
+    kind === 'headset' && (
+      <g>
+        <g class="art-msg" style="--i:0">
+          <rect x="70" y="58" width="190" height="52" rx="18" fill="rgb(255 255 255 / .08)" stroke="rgb(255 255 255 / .2)" />
+          <rect x="92" y="78" width="110" height="6" rx="3" fill="rgb(255 255 255 / .45)" />
+          <rect x="92" y="90" width="70" height="6" rx="3" fill="rgb(255 255 255 / .25)" />
+        </g>
+        <g class="art-msg" style="--i:1">
+          <rect x="140" y="128" width="190" height="52" rx="18" fill={`url(#${gid})`} />
+          <rect x="162" y="148" width="120" height="6" rx="3" fill="rgb(10 10 10 / .55)" />
+          <rect x="162" y="160" width="80" height="6" rx="3" fill="rgb(10 10 10 / .35)" />
+        </g>
+        <g class="art-msg" style="--i:2">
+          <rect x="70" y="198" width="96" height="44" rx="16" fill="rgb(255 255 255 / .08)" stroke="rgb(255 255 255 / .2)" />
+          <circle class="art-dot" cx="98" cy="220" r="4" fill="#f3f3f1" style="--d:0" />
+          <circle class="art-dot" cx="118" cy="220" r="4" fill="#f3f3f1" style="--d:1" />
+          <circle class="art-dot" cx="138" cy="220" r="4" fill="#f3f3f1" style="--d:2" />
+        </g>
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .service-art { width: 100%; height: auto; overflow: visible; }
+
+  /* Mesmo dia: ponteiro e órbita */
+  .art-hand { transform-origin: 200px 150px; transform: rotate(-60deg); transition: transform 1.4s var(--ease-out-expo); }
+  .art-orbit { transform-origin: 200px 150px; transform: rotate(-90deg); stroke-dashoffset: 26; transition: stroke-dashoffset 1.4s var(--ease-out-expo); }
+  .art-pop { opacity: 0; transform: translateY(10px) scale(0.8); transform-origin: 290px 94px; transition: all 0.8s var(--ease-out-expo) 0.4s; }
+  .is-active .art-hand { transform: rotate(80deg); animation: hand 6s linear 1.4s infinite; }
+  .is-active .art-orbit { stroke-dashoffset: -60; animation: orbit 3.2s linear 1.4s infinite; }
+  .is-active .art-pop { opacity: 1; transform: none; }
+  @keyframes hand { to { transform: rotate(440deg); } }
+  @keyframes orbit { from { stroke-dashoffset: -60; } to { stroke-dashoffset: -160; } }
+
+  /* Marketplaces: caixas empilhando */
+  .art-box { opacity: 0.2; transform: translateY(-24px); transition: all 0.9s var(--ease-out-expo) calc(var(--i) * 0.12s); }
+  .is-active .art-box { opacity: 1; transform: none; }
+
+  /* Rotas: traçado */
+  .art-path { stroke-dasharray: 100; stroke-dashoffset: 100; transition: stroke-dashoffset 1.6s var(--ease-out-expo); }
+  .is-active .art-path { stroke-dashoffset: 0; }
+  .art-ring { transform-origin: 340px 50px; opacity: 0; }
+  .is-active .art-ring { animation: ring 1.8s var(--ease-out-expo) 1s infinite; }
+  @keyframes ring { from { transform: scale(1); opacity: 0.9; } to { transform: scale(3.2); opacity: 0; } }
+
+  /* SAC: mensagens */
+  .art-msg { opacity: 0; transform: translateY(14px); transition: all 0.7s var(--ease-out-expo) calc(var(--i) * 0.25s); }
+  .is-active .art-msg { opacity: 1; transform: none; }
+  .is-active .art-dot { animation: typing 1.2s ease-in-out calc(var(--d) * 0.15s + 1s) infinite; }
+  @keyframes typing { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-4px); } }
+  .art-dot { transform-box: fill-box; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .art-hand, .art-orbit, .art-pop, .art-box, .art-path, .art-msg { transition: none !important; animation: none !important; }
+    .art-path { stroke-dashoffset: 0; }
+    .art-box, .art-msg, .art-pop { opacity: 1; transform: none; }
+  }
+</style>

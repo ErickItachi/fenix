@@ -1,0 +1,51 @@
+---
+import { differentials, facts } from '../data/site'
+---
+
+<section id="diferenciais" data-section="Diferenciais" data-theme="light" class="relative overflow-hidden bg-paper py-24 text-ink sm:py-32 lg:py-40" aria-labelledby="dif-title">
+  <div class="wrap">
+    <div class="flex flex-col justify-between gap-6 border-b border-ink/15 pb-8 md:flex-row md:items-end">
+      <div>
+        <p data-reveal class="eyebrow text-ember">04 — Diferenciais</p>
+        <h2 id="dif-title" data-split class="display mt-6 text-[clamp(2.4rem,6vw,5.8rem)]">Por que escolher a Fênix?</h2>
+      </div>
+      <p data-reveal class="max-w-sm text-ink/70">Capacidade, organização e comunicação direta para manter sua operação rodando, inclusive nos picos.</p>
+    </div>
+
+    <ol class="mt-4">
+      {
+        differentials.map((d, i) => (
+          <li class="dif-row grid gap-3 border-b border-ink/15 py-8 sm:py-10 md:grid-cols-[4rem_1fr_minmax(0,18rem)] md:items-center md:gap-8" data-dif>
+            <span class="eyebrow text-ink/50">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="display grid text-[clamp(1.9rem,5.4vw,5rem)]">
+              <span class="text-outline col-start-1 row-start-1 text-ink/35" aria-hidden="true">{d.title}</span>
+              <span data-dif-fill class="col-start-1 row-start-1">{d.title}</span>
+            </h3>
+            <p class="text-ink/70 md:text-right">{d.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <!-- Fatos verificáveis -->
+    <dl class="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-[1.75rem] border border-ink/15 bg-ink/15 lg:mt-28 lg:grid-cols-4">
+      {
+        facts.map((f) => (
+          <div class="group relative bg-paper p-6 transition-colors duration-500 hover:bg-ink hover:text-paper sm:p-8">
+            <dt class="sr-only">{f.label}</dt>
+            <dd class="display tabular text-[clamp(2.8rem,6vw,5.5rem)] !leading-none">
+              <span data-count={f.value} data-pad={f.pad}>{String(f.value).padStart(f.pad, '0')}</span>
+              <span class="text-ember">{f.suffix}</span>
+            </dd>
+            <dd class="mt-4 font-semibold" aria-hidden="true">{f.label}</dd>
+            <dd class="mt-1 text-sm text-ink/60 transition-colors duration-500 group-hover:text-steel">{f.note}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  html.motion [data-dif-fill] { clip-path: inset(0 100% 0 0); }
+</style>
