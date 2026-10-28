@@ -15,7 +15,7 @@ import { waLink } from '../lib/whatsapp'
   </div>
 
   <div data-hero-content class="wrap relative flex flex-1 flex-col justify-center pb-8 pt-8 sm:pt-12">
-    <p data-hero-fade class="eyebrow mb-6 flex items-center gap-3 text-steel sm:mb-8">
+    <p data-hero-fade style="--i:0" class="eyebrow mb-6 flex items-center gap-3 text-steel sm:mb-8">
       <span class="relative flex size-2.5" aria-hidden="true">
         <span class="absolute inset-0 animate-ping rounded-full bg-fire opacity-70" />
         <span class="relative size-2.5 rounded-full bg-fire" />
@@ -23,18 +23,18 @@ import { waLink } from '../lib/whatsapp'
       Última milha · Grande São Paulo
     </p>
 
-    <h1 id="hero-title" class="display max-w-[15ch] text-[clamp(3rem,10.6vw,10.25rem)]">
-      <span data-hero-line class="split-line"><span class="split-inner block">Seu pedido</span></span>
-      <span data-hero-line class="split-line"><span class="split-inner block"><span class="display-italic text-flame pr-[0.06em]">renasce</span> a</span></span>
-      <span data-hero-line class="split-line"><span class="split-inner block">cada entrega<span class="text-fire">.</span></span></span>
+    <h1 id="hero-title" class="display max-w-[15ch] text-[clamp(3rem,min(10.4vw,15.5svh),10rem)]">
+      <span data-hero-line class="split-line" style="--i:0"><span class="split-inner block">Seu pedido</span></span>
+      <span data-hero-line class="split-line" style="--i:1"><span class="split-inner block"><span class="display-italic text-flame pr-[0.06em]">renasce</span> a</span></span>
+      <span data-hero-line class="split-line" style="--i:2"><span class="split-inner block">cada entrega<span class="text-fire">.</span></span></span>
     </h1>
 
     <div class="mt-8 grid gap-8 sm:mt-10 lg:grid-cols-[minmax(0,34rem)_1fr] lg:items-end">
       <div>
-        <p data-hero-fade class="max-w-[34rem] text-[1.05rem] leading-relaxed text-steel sm:text-lg">
+        <p data-hero-fade style="--i:1" class="max-w-[34rem] text-[1.05rem] leading-relaxed text-steel sm:text-lg">
           Entregas rápidas no mesmo dia para quem vende em marketplaces. Coletamos, organizamos por região e levamos cada pacote até a porta do seu cliente, com rastreio e SAC dedicado.
         </p>
-        <div data-hero-fade class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div data-hero-fade style="--i:2" class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Button href={waLink('Olá! Quero uma proposta de entregas para minha loja.')} external icon="whatsapp" data-wa-context>
             Solicitar proposta
           </Button>
@@ -42,7 +42,7 @@ import { waLink } from '../lib/whatsapp'
         </div>
       </div>
 
-      <dl data-hero-fade class="grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 backdrop-blur-sm lg:ml-auto lg:w-[30rem]">
+      <dl data-hero-fade style="--i:3" class="grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 backdrop-blur-sm lg:ml-auto lg:w-[30rem]">
         <div class="bg-ink/70 p-3.5 sm:p-5">
           <dt class="eyebrow !text-[0.6rem] text-ash">Coletas</dt>
           <dd class="display mt-2 whitespace-nowrap text-[1.35rem] min-[400px]:text-2xl sm:text-3xl">2<span class="text-fire">×</span></dd>
@@ -62,7 +62,7 @@ import { waLink } from '../lib/whatsapp'
     </div>
   </div>
 
-  <div data-hero-fade class="wrap relative flex items-end justify-between gap-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+  <div data-hero-fade style="--i:4" class="wrap relative flex items-end justify-between gap-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
     <a href="#marketplaces" class="group flex items-center gap-4 text-steel transition-colors hover:text-paper">
       <span class="relative h-12 w-px overflow-hidden bg-white/15" aria-hidden="true">
         <span class="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.2s_var(--ease-in-out-quart)_infinite] bg-fire" />

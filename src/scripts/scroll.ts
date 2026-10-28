@@ -35,7 +35,6 @@ export function initScroll() {
         return () => network?.destroy()
       }
 
-      heroIntro()
       heroScroll(network)
       headings()
       reveals()
@@ -57,13 +56,6 @@ export function initScroll() {
 }
 
 /* Hero ------------------------------------------------------------------ */
-function heroIntro() {
-  const tl = gsap.timeline({ defaults: { ease: 'expo.out' }, delay: 0.1 })
-  tl.fromTo('[data-hero-line] .split-inner', { y: 0, yPercent: 105 }, { y: 0, yPercent: 0, duration: 1.35, stagger: 0.11 })
-    .fromTo('[data-hero-fade]', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 1.2, stagger: 0.09 }, 0.45)
-    .from('[data-header] > div', { y: -30, opacity: 0, duration: 1.1 }, 0.2)
-}
-
 function heroScroll(network: ReturnType<typeof createHeroNetwork> | null) {
   const tl = gsap.timeline({
     scrollTrigger: {
@@ -112,11 +104,12 @@ function scrubWords() {
   $$('[data-scrub-words]').forEach((el) => {
     SplitText.create(el, {
       type: 'words',
+      aria: 'none',
       autoSplit: true,
       onSplit: (self) =>
         gsap.fromTo(
           self.words,
-          { opacity: 0.12 },
+          { opacity: 0.16 },
           { opacity: 1, stagger: 0.1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 50%', scrub: true } },
         ),
     })

@@ -7,6 +7,6 @@ export default defineConfig({
   site: 'https://www.fenixentregasflex.com.br',
   trailingSlash: 'ignore',
   integrations: [sitemap()],
-  build: { inlineStylesheets: 'auto' },
+  build: { inlineStylesheets: 'always' },
   vite: { plugins: [tailwindcss()] },
 })

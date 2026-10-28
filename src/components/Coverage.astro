@@ -32,6 +32,10 @@ for (let y = 10; y < H; y += 18) {
     dots.push({ x, y, o })
   }
 }
+const dotLayers = [0.55, 0.22, 0.1, 0.045].map((o) => ({
+  o,
+  d: dots.filter((p) => p.o === o).map((p) => `M${p.x} ${p.y}h0`).join(''),
+}))
 const rings = [10, 20, 30, 40].map((km) => ({ km, r: km / kmPerUnitY }))
 ---
 
@@ -56,7 +60,7 @@ const rings = [10, 20, 30, 40].map((km) => ({ km, r: km / kmPerUnitY }))
         <svg viewBox={`0 0 ${W} ${H}`} class="block h-auto w-full" role="img" aria-labelledby="mapa-desc">
           <desc id="mapa-desc">Mapa esquemático da Grande São Paulo com rotas da base Fênix, no Parque Novo Mundo, até a capital, Região do ABC, Guarulhos, Osasco, Caieiras, Cajamar, Cotia, Embu, Barueri, Alphaville, Carapicuíba, Jandira, Itapevi, Santana de Parnaíba e Alto Tietê.</desc>
           <g aria-hidden="true">
-            {dots.map((d) => <circle cx={d.x} cy={d.y} r="1.5" fill="#f3f3f1" opacity={d.o} />)}
+            {dotLayers.map((l) => <path d={l.d} stroke="#f3f3f1" stroke-opacity={l.o} stroke-width="3" stroke-linecap="round" />)}
             {
               rings.map((r) => (
                 <g>

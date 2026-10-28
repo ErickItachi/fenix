@@ -215,9 +215,15 @@
 }
 
 /* Estados iniciais das animações: só valem quando o motion está ativo (classe definida no <head>). */
-html.motion [data-hero-fade],
 html.motion [data-reveal] { opacity: 0; }
-html.motion [data-hero-line] .split-inner { transform: translateY(105%); }
+
+/* Entrada do hero em CSS: começa no primeiro quadro, sem depender do JavaScript */
+@keyframes hero-rise { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes hero-fade { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes header-in { from { opacity: 0; transform: translateY(-24px); } to { opacity: 1; transform: none; } }
+html.motion [data-hero-line] .split-inner { animation: hero-rise 1.35s var(--ease-out-expo) both; animation-delay: calc(0.08s + var(--i, 0) * 0.11s); }
+html.motion [data-hero-fade] { animation: hero-fade 1.1s var(--ease-out-expo) both; animation-delay: calc(0.35s + var(--i, 0) * 0.08s); }
+html.motion [data-header] > div:first-child { animation: header-in 1.1s var(--ease-out-expo) 0.15s both; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
