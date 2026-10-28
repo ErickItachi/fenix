@@ -13,7 +13,7 @@ const volumes = ['Até 30 pedidos/dia', '30 a 100 pedidos/dia', '100 a 300 pedid
     <path data-parallax-x="8" d="M160 0h40L0 270v-55z" fill="#0a0a0a" />
   </svg>
 
-  <div class="wrap grid gap-14 lg:grid-cols-12 lg:gap-10">
+  <div class="wrap grid grid-cols-[minmax(0,1fr)] gap-14 lg:grid-cols-12 lg:gap-10">
     <div class="lg:col-span-6">
       <p data-reveal class="eyebrow text-ink/70">08 — Contato comercial</p>
       <h2 id="contato-title" data-split class="display mt-6 text-[clamp(2.6rem,7vw,6.6rem)]">Pronto para elevar sua operação?</h2>
@@ -21,10 +21,10 @@ const volumes = ['Até 30 pedidos/dia', '30 a 100 pedidos/dia', '100 a 300 pedid
         Fale agora com o time comercial e descubra como a Fênix pode acelerar as entregas da sua loja.
       </p>
 
-      <div data-reveal class="mt-10 grid gap-3 sm:max-w-md">
+      <div data-reveal class="mt-10 grid grid-cols-[minmax(0,1fr)] gap-3 sm:max-w-md">
         <a href={waLink()} target="_blank" rel="noopener" data-magnetic class="contact-line group">
-          <span data-magnetic-inner class="flex w-full items-center gap-4">
-            <span class="grid size-12 place-items-center rounded-full bg-ink text-whats"><Icon name="whatsapp" size={22} /></span>
+          <span data-magnetic-inner class="flex w-full min-w-0 items-center gap-4">
+            <span class="grid size-12 shrink-0 place-items-center rounded-full bg-ink text-whats"><Icon name="whatsapp" size={22} /></span>
             <span class="flex-1">
               <span class="eyebrow block !text-[0.62rem] text-ink/65">WhatsApp comercial</span>
               <span class="display text-xl">{site.phones.commercial.label}</span>
@@ -33,8 +33,8 @@ const volumes = ['Até 30 pedidos/dia', '30 a 100 pedidos/dia', '100 a 300 pedid
           </span>
         </a>
         <a href={telLink('sac')} class="contact-line group">
-          <span class="flex w-full items-center gap-4">
-            <span class="grid size-12 place-items-center rounded-full border border-ink/25"><Icon name="phone" size={20} /></span>
+          <span class="flex w-full min-w-0 items-center gap-4">
+            <span class="grid size-12 shrink-0 place-items-center rounded-full border border-ink/25"><Icon name="phone" size={20} /></span>
             <span class="flex-1">
               <span class="eyebrow block !text-[0.62rem] text-ink/65">SAC · {site.sacHours.open} às {site.sacHours.close}</span>
               <span class="display text-xl">{site.phones.sac.label}</span>
@@ -43,8 +43,8 @@ const volumes = ['Até 30 pedidos/dia', '30 a 100 pedidos/dia', '100 a 300 pedid
           </span>
         </a>
         <a href={`mailto:${site.email}`} class="contact-line group">
-          <span class="flex w-full items-center gap-4">
-            <span class="grid size-12 place-items-center rounded-full border border-ink/25"><Icon name="mail" size={20} /></span>
+          <span class="flex w-full min-w-0 items-center gap-4">
+            <span class="grid size-12 shrink-0 place-items-center rounded-full border border-ink/25"><Icon name="mail" size={20} /></span>
             <span class="flex-1 overflow-hidden">
               <span class="eyebrow block !text-[0.62rem] text-ink/65">E-mail</span>
               <span class="block truncate font-semibold">{site.email}</span>
