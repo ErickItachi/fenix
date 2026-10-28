@@ -1,6 +1,6 @@
 ---
-import { marketplaces } from '../data/site'
-const row = [...marketplaces, ...marketplaces]
+import { marketplaces, marketplaceLogos } from '../data/site'
+const row = [...marketplaceLogos, ...marketplaceLogos]
 const tags = ['Última milha', 'Entregas no mesmo dia', 'Duas coletas por dia', 'Rastreio ponta a ponta', 'SAC dedicado']
 ---
 
@@ -19,14 +19,19 @@ const tags = ['Última milha', 'Entregas no mesmo dia', 'Duas coletas por dia', 
   </ul>
 
   <div class="relative" aria-hidden="true">
-    <div data-marquee="-1" class="flex w-max will-change-transform">
+    <div data-marquee="-1" class="flex w-max items-center will-change-transform">
       {
         [0, 1].map(() => (
           <div class="flex shrink-0 items-center">
-            {row.map((name) => (
+            {row.map((logo) => (
               <span class="flex items-center">
-                <span class="display whitespace-nowrap px-6 text-[clamp(2.5rem,8vw,7.5rem)] text-chrome sm:px-10">{name}</span>
-                <svg viewBox="0 0 40 40" class="size-[clamp(1.5rem,4vw,3.5rem)] text-fire" fill="currentColor">
+                <span class="mk-cell flex items-center justify-center px-8 sm:px-14">
+                  <span
+                    class="mk-logo"
+                    style={`--src:url(${logo.src}); --k:${logo.scale}; aspect-ratio:${logo.width} / ${logo.height};`}
+                  />
+                </span>
+                <svg viewBox="0 0 40 40" class="size-[clamp(1.1rem,2.6vw,2.2rem)] text-fire/90" fill="currentColor">
                   <path d="M33 4h6L7 36H1z" />
                 </svg>
               </span>
@@ -52,5 +57,20 @@ const tags = ['Última milha', 'Entregas no mesmo dia', 'Duas coletas por dia', 
     </div>
   </div>
 
-  <p class="wrap mt-10 text-[0.72rem] text-ash">Marcas citadas pertencem aos respectivos titulares. A menção indica os canais de venda atendidos, não uma parceria oficial.</p>
+  <p class="wrap mt-10 text-[0.72rem] text-ash">Logos e marcas pertencem aos respectivos titulares. A exibição indica os canais de venda atendidos, não uma parceria oficial.</p>
 </section>
+
+<style>
+  .mk-cell { height: clamp(5.5rem, 13vw, 10rem); }
+  /* Silhueta do logo pintada com o mesmo gradiente prata do logotipo da Fênix */
+  .mk-logo {
+    display: block;
+    height: calc(clamp(2.4rem, 5.4vw, 4.6rem) * var(--k));
+    background: linear-gradient(180deg, #ffffff 0%, #d9d9d9 40%, #9a9a9a 55%, #e9e9e9 75%, #bdbdbd 100%);
+    -webkit-mask: var(--src) center / contain no-repeat;
+    mask: var(--src) center / contain no-repeat;
+    opacity: 0.85;
+    transition: opacity 0.5s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+  }
+  .mk-cell:hover .mk-logo { opacity: 1; transform: scale(1.04); }
+</style>

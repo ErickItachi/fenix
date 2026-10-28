@@ -21,6 +21,7 @@ Todo o conteúdo comercial está em `src/data/site.ts`: telefones, e-mail, ender
 
 - Mensagens de WhatsApp: `src/lib/whatsapp.ts` e o campo `wa` de cada serviço. A mensagem do botão flutuante muda conforme a seção visível (`contextMessages` em `src/scripts/ui.ts`).
 - Coordenadas do mapa: `regions` em `src/data/site.ts` (latitude e longitude aproximadas). O mapa e a rede animada da abertura são gerados a partir delas.
+- Logos dos marketplaces: os arquivos oficiais ficam em `brand/marketplaces/`. `python3 scripts/marketplaces.py brand/marketplaces public/marketplaces` remove o fundo e gera as silhuetas monocromáticas em `public/marketplaces/`. No site elas são pintadas com o gradiente prata via `mask-image` (`src/components/Marketplaces.astro`).
 - Logo: o original transparente fica em `brand/fenix-logo-original.webp`. Para regenerar as versões web em `public/brand/`, rode `python3 scripts/logo.py brand/fenix-logo-original.webp public/brand` (requer Pillow).
 
 ## Estrutura

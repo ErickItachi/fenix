@@ -43,6 +43,17 @@ export const nav = [
 /** Marketplaces atendidos. Os nomes pertencem aos respectivos titulares. */
 export const marketplaces = ['Mercado Livre', 'Shopee', 'Amazon', 'Magalu'] as const
 
+/**
+ * Logos oficiais em silhueta monocromática (gerados por scripts/marketplaces.py).
+ * `scale` equilibra o peso visual: logos verticais ficam mais altos, palavras longas mais baixas.
+ */
+export const marketplaceLogos = [
+  { name: 'Mercado Livre', src: '/marketplaces/mercado-livre.webp', width: 788, height: 200, scale: 1 },
+  { name: 'Shopee', src: '/marketplaces/shopee.webp', width: 254, height: 360, scale: 1.5 },
+  { name: 'Amazon', src: '/marketplaces/amazon.webp', width: 659, height: 200, scale: 0.98 },
+  { name: 'Magalu', src: '/marketplaces/magalu.webp', width: 641, height: 140, scale: 0.6 },
+] as const
+
 /** Fatos operacionais publicados pela própria Fênix. */
 export const facts = [
   { value: 2, pad: 2, suffix: '', label: 'janelas de coleta por dia', note: 'Duas operações logísticas diárias' },

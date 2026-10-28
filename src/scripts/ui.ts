@@ -22,6 +22,7 @@ export function initMenu() {
   const toggle = $<HTMLButtonElement>('[data-menu-toggle]')
   const menu = $('[data-menu]')
   const label = $('[data-menu-label]')
+  const header = $('[data-header]')
   if (!toggle || !menu) return
   const links = $$('[data-menu-link]', menu)
   let open = false
@@ -31,6 +32,7 @@ export function initMenu() {
     open = state
     toggle.setAttribute('aria-expanded', String(state))
     if (label) label.textContent = state ? 'Fechar menu' : 'Abrir menu'
+    header?.classList.toggle('menu-open', state)
     document.documentElement.style.overflow = state ? 'hidden' : ''
     const dur = reducedMotion() ? 0 : 700
     if (state) {
@@ -62,7 +64,8 @@ export function initMenu() {
     if (!open) return
     if (e.key === 'Escape') set(false)
     if (e.key === 'Tab') {
-      const focusables = [toggle, ...$$<HTMLElement>('a, button', menu)]
+      const logo = header?.querySelector<HTMLElement>('a[href="#inicio"]')
+      const focusables = [...(logo ? [logo] : []), toggle, ...$$<HTMLElement>('a, button', menu)]
       const i = focusables.indexOf(document.activeElement as HTMLElement)
       if (e.shiftKey && i <= 0) { e.preventDefault(); focusables[focusables.length - 1].focus() }
       else if (!e.shiftKey && i === focusables.length - 1) { e.preventDefault(); focusables[0].focus() }
@@ -253,7 +256,9 @@ export function initSectionAwareness() {
   if (hero) new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting; sync() }, { rootMargin: '-20% 0px 0px 0px' }).observe(hero)
   if (contact) new IntersectionObserver(([e]) => { onContact = e.isIntersecting; sync() }, { threshold: 0.35 }).observe(contact)
 
-  window.addEventListener('resize', () => movePill(navLinks.find((l) => l.classList.contains('is-active'))))
+  const refresh = () => movePill(navLinks.find((l) => l.classList.contains('is-active')))
+  window.addEventListener('resize', refresh)
+  document.fonts?.ready.then(refresh)
   return () => current
 }
 
@@ -261,20 +266,18 @@ export function initSectionAwareness() {
 export function initHeader() {
   const header = $('[data-header]')
   if (!header) return
-  let lastY = window.scrollY
   let ticking = false
-  const onScroll = () => {
-    const y = window.scrollY
-    header.classList.toggle('is-scrolled', y > 24)
-    const menuOpen = $('[data-menu-toggle]')?.getAttribute('aria-expanded') === 'true'
-    header.classList.toggle('is-hidden', !menuOpen && y > lastY + 4 && y > window.innerHeight * 0.9)
-    if (y < lastY - 4) header.classList.remove('is-hidden')
-    lastY = y
+  const update = () => {
+    header.classList.toggle('is-scrolled', window.scrollY > 16)
     ticking = false
   }
-  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll) } }, { passive: true })
-  header.addEventListener('focusin', () => header.classList.remove('is-hidden'))
-  onScroll()
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true
+      requestAnimationFrame(update)
+    }
+  }, { passive: true })
+  update()
 }
 
 /* Magnético + cursor (apenas ponteiro fino, sem movimento reduzido) ------- */

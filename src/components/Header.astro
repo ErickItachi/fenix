@@ -5,7 +5,7 @@ import { nav, site } from '../data/site'
 import { waLink } from '../lib/whatsapp'
 ---
 
-<header id="topo" data-header class="fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500">
+<header id="topo" data-header class="fixed inset-x-0 top-0 z-50">
   <div class="wrap flex h-[var(--header-h)] items-center justify-between gap-6">
     <a href="#inicio" class="relative z-10 shrink-0" aria-label="Fênix Entregas Flex — início">
       <Logo width={128} eager class="h-auto w-[104px] sm:w-[128px]" />
@@ -80,21 +80,34 @@ import { waLink } from '../lib/whatsapp'
   </nav>
   <div class="wrap relative grid gap-3 pb-[max(1.5rem,env(safe-area-inset-bottom))]" data-menu-foot>
     <a href={waLink()} target="_blank" rel="noopener" class="btn btn-fire w-full">
-      <Icon name="whatsapp" size={18} /> WhatsApp comercial · {site.phones.commercial.label}
+      <Icon name="whatsapp" size={18} /> Falar no WhatsApp
     </a>
+    <p class="text-center text-xs text-ash">Comercial {site.phones.commercial.label} · SAC {site.phones.sac.label}</p>
     <a href={`mailto:${site.email}`} class="btn btn-ghost w-full">{site.email}</a>
   </div>
 </div>
 
 <style>
-  [data-header].is-scrolled {
-    background-color: rgb(10 10 10 / 0.72);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  /* O cabeçalho fica sempre visível. Ao rolar, ganha um fundo escuro opaco o bastante
+     para ler bem sobre seções claras e escuras. Com o menu móvel aberto, sobe acima
+     da sobreposição para que o logo e o botão de fechar continuem acessíveis. */
+  [data-header] {
+    transition: background-color 0.45s var(--ease-out-expo), border-color 0.45s, backdrop-filter 0.45s;
+    border-bottom: 1px solid transparent;
   }
-  [data-header].is-scrolled > div:last-child { background-color: rgb(255 255 255 / 0.08); }
-  [data-header].is-hidden { transform: translateY(-100%); }
-  [data-header] { transition: transform 0.6s var(--ease-out-expo), background-color 0.5s, backdrop-filter 0.5s; }
+  [data-header].is-scrolled {
+    background-color: rgb(10 10 10 / 0.9);
+    border-color: rgb(255 255 255 / 0.08);
+    backdrop-filter: blur(16px) saturate(140%);
+  }
+  [data-header].menu-open {
+    z-index: 60;
+    background-color: transparent;
+    border-color: transparent;
+    backdrop-filter: none;
+  }
+  [data-header].menu-open [data-wa-context],
+  [data-header].menu-open > div:last-child { opacity: 0; pointer-events: none; }
   .nav-link.is-active { color: var(--color-paper); }
   [data-menu-toggle][aria-expanded='true'] [data-burger='1'] { transform: translateY(5.25px) rotate(45deg); }
   [data-menu-toggle][aria-expanded='true'] [data-burger='2'] { transform: translateY(-5.25px) rotate(-45deg); }
